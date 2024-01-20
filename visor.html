@@ -19,11 +19,14 @@
 	
 	<link rel="stylesheet" href="leaflet-elevation.css" />
 
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+
 	<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
    crossorigin=""></script>
 	<script type="text/javascript" src="leaflet-elevation.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.4.0/gpx.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
 </head>
 <body>
 
@@ -33,8 +36,21 @@
 	<script type="text/javascript">
 		
 		const otm = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-			attribution: '© OpenTopoMap'
+			attribution: '© OpenTopoMap',
+			maxZoom: 16,
+    		maxNativeZoom: 14
 		});
+
+		const refugesinfo = L.tileLayer( 'https://maps.refuges.info/hiking/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://maps.refuges.info/" target="refugesinfo">Maps Refuges Info</a>',
+			maxZoom: 17
+        });
+
+		const topotresc = L.tileLayer( 'https://api.topotresc.com/tiles/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://www.topotresc.com/" target="topotresc">Topotresc</a>',
+			minZoom: 7,
+			maxZoom: 17
+        });
 
 		const orto = L.tileLayer('https://geoserveis.icgc.cat/icc_mapesmultibase/noutm/wmts/orto/GRID3857/{z}/{x}/{y}.png', {
 			attribution: '© ICGC'
@@ -42,6 +58,8 @@
 
 		const baseMaps = {
 			"OpenTopoMap": otm,
+			"Maps Refuges Info": refugesinfo,
+			"Topotresc": topotresc,
 			"Ortofoto": orto
 		};
 
@@ -79,6 +97,14 @@
 		gpxRuta.on('loaded', function(e) {
 		  		map.fitBounds(e.target.getBounds());
 		});
+
+		var lc = L.control.locate({
+			position: "topleft",
+			strings: {
+			title: "Posició"
+			}
+		})
+		.addTo(map);
 
 	</script>
 </body>
